@@ -7,17 +7,17 @@ class Update_Form extends StatefulWidget {
 }
 
 class _Update_FormState extends State<Update_Form> {
-  CollectionReference UpdateCollection =
+  CollectionReference postCollection =
       FirebaseFirestore.instance.collection('Comment');
 
   @override
   Widget build(BuildContext context) {
-    final UpdateData = ModalRoute.of(context)!.settings.arguments as dynamic;
+    final postData = ModalRoute.of(context)!.settings.arguments as dynamic;
 
-    final titleController = TextEditingController(text: UpdateData['title']);
+    final titleController = TextEditingController(text: postData['title']);
     final descriptionController =
-        TextEditingController(text: UpdateData['description']);
-    int rating = UpdateData['rating'] ?? 0; // ✅ ดึงค่าดาวจาก Firestore
+        TextEditingController(text: postData['description']);
+    int rating = postData['rating'] ?? 0; // ✅ ดึงค่าดาวจาก Firestore
 
     return Scaffold(
       appBar: AppBar(
@@ -124,7 +124,7 @@ class _Update_FormState extends State<Update_Form> {
                 // 🔹 **ปุ่มอัปเดตข้อมูล**
                 ElevatedButton(
                   onPressed: () {
-                    UpdateCollection.doc(UpdateData.id).update({
+                    postCollection.doc(postData.id).update({
                       'title': titleController.text,
                       'description': descriptionController.text,
                       'rating': rating, // ✅ บันทึกค่าดาวลง Firestore
