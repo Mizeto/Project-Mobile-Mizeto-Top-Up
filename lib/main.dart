@@ -19,28 +19,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Game Top-up App',
-      // theme: ThemeData(
-      //   primarySwatch: Colors.blue,
-      //   // textTheme: TextTheme(
-      //   //   displayLarge: TextStyle(
-      //   //       fontSize: 35,
-      //   //       fontWeight: FontWeight.bold,
-      //   //       foreground: Paint()
-      //   //         ..shader = LinearGradient(
-      //   //           colors: [Colors.blue, Colors.purple],
-      //   //         ).createShader(Rect.fromLTWH(0, 0, 200, 70))),
-      //   //   // displayMedium: TextStyle(
-      //   //   //     fontSize: 24,
-      //   //   //     fontWeight: FontWeight.bold,
-      //   //   //     foreground: Paint()
-      //   //   //       ..shader = LinearGradient(
-      //   //   //         colors: [Colors.blue, Colors.purple],
-      //   //   //       ).createShader(Rect.fromLTWH(0, 0, 200, 70))),
-      //   //   // bodyLarge: TextStyle(fontSize: 20, color: Colors.black),
-      //   //   // bodyMedium: TextStyle(
-      //   //   //     fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black54),
-      //   // ),
-      // ),
       home: MainScreen(), // หน้าตรวจสอบการล็อกอิน
     );
   }
