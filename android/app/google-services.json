@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "245512284138",
+    "project_id": "ggauthen-efbe6",
+    "storage_bucket": "ggauthen-efbe6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245512284138:android:ce4689f5e5c59dbe6d3493",
+        "android_client_info": {
+          "package_name": "com.example.firebasere"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245512284138-jfcgftll3ju04vctt4g3r6959kg435di.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAujleN6CjFm0zO8aRBo_2AtuuLCmn_k8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245512284138-jfcgftll3ju04vctt4g3r6959kg435di.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
