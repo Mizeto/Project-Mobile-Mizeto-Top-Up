@@ -16,7 +16,6 @@ class _Comment_ScreenState extends State<Comment_Screen> {
   //------ หน้าจอแต่ละหน้า ------
   final mobileScreens = [
     home(),
-    search(),
   ];
 
   @override
@@ -170,23 +169,6 @@ class _homeState extends State<home> {
             );
           }
         }),
-      ),
-    );
-  }
-}
-
-//------------- Search page -------------
-class search extends StatelessWidget {
-  const search({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text('Search')],
-        ),
       ),
     );
   }

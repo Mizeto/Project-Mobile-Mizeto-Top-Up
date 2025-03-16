@@ -14,6 +14,31 @@ class _Add_FormState extends State<Add_Form> {
   CollectionReference CommentCollection =
       FirebaseFirestore.instance.collection('Comment');
 
+  // 🔹 **แสดง Snackbar เมื่อเกิดข้อผิดพลาด**
+  void showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  void submitComment() {
+    if (titleController.text.trim().isEmpty) {
+      showErrorMessage("กรุณากรอกชื่อเกมก่อนโพสต์");
+      return;
+    }
+
+    CommentCollection.add({
+      'title': titleController.text.trim(),
+      'description': descriptionController.text.trim(),
+      'rating': rating, // ✅ บันทึกค่าดาวลง Firestore
+    });
+
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,30 +64,34 @@ class _Add_FormState extends State<Add_Form> {
                 Text(
                   'Please comment politely!!!',
                   style: TextStyle(
-                    fontFamily: 'gamer1',
-                    fontSize: 24,
-                  ),
+                      fontFamily: 'gamer1', fontSize: 25, color: Colors.red),
                 ),
                 SizedBox(height: 20),
 
                 // 🔹 **ช่องกรอกหัวข้อโพสต์**
-                TextFormField(
-                  controller: titleController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: 'Add a name game',
-                    icon: Icon(Icons.title),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
+                    controller: titleController,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: 'Add a name game',
+                      icon: Icon(Icons.videogame_asset),
+                    ),
                   ),
                 ),
                 SizedBox(height: 10),
 
                 // 🔹 **ช่องกรอกเนื้อหาของโพสต์**
-                TextFormField(
-                  controller: descriptionController,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: 'Start a new comment',
-                    icon: Icon(Icons.description),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
+                    controller: descriptionController,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      hintText: 'Start a new comment',
+                      icon: Icon(Icons.rate_review),
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -116,14 +145,7 @@ class _Add_FormState extends State<Add_Form> {
 
                 // 🔹 **ปุ่มโพสต์**
                 ElevatedButton(
-                  onPressed: () {
-                    CommentCollection.add({
-                      'title': titleController.text,
-                      'description': descriptionController.text,
-                      'rating': rating, // ✅ บันทึกค่าดาวลง Firestore
-                    });
-                    Navigator.pop(context);
-                  },
+                  onPressed: submitComment,
                   child: Text('Enter'),
                 ),
               ],

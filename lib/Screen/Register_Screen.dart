@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'Home_Screen.dart';
 import 'Login_Screen.dart';
@@ -12,56 +11,53 @@ class Register_Screen extends StatefulWidget {
 }
 
 class _Register_ScreenState extends State<Register_Screen> {
-  bool _obscurePassword = true;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  Future<void> signUserUp() async {
-    try {
-      if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Home_Screen()),
-        );
-      } else {
-        print("Passwords do not match");
-      }
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-    }
+  // 🔹 **ฟังก์ชันแสดงข้อความแจ้งเตือน**
+  void showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
-  Future<UserCredential> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+  Future<void> signUserUp() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    String confirmPassword = confirmPasswordController.text.trim();
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+    // 🔹 **เช็คว่ารหัสผ่านตรงกันหรือไม่**
+    if (password != confirmPassword) {
+      showErrorMessage("รหัสผ่านไม่ตรงกัน");
+      return;
+    }
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Home_Screen()));
+    } on FirebaseAuthException catch (e) {
+      showErrorMessage("เกิดข้อผิดพลาด: ${e.message}");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        // ✅ ป้องกัน Overflow
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                  height: MediaQuery.of(context).size.height *
-                      0.1), // ✅ ปรับให้เหมาะกับหน้าจอ
+              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               Text(
                 "Register Your Account",
                 style: TextStyle(
@@ -103,45 +99,6 @@ class _Register_ScreenState extends State<Register_Screen> {
                 onPressed: signUserUp,
                 child: Text("Register"),
               ),
-              SizedBox(height: 40),
-
-              // ✅ **Divider: "Or continue with"**
-              Row(
-                children: [
-                  Expanded(child: Divider(color: Colors.black, thickness: 1)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      "Or continue with",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  Expanded(child: Divider(color: Colors.black, thickness: 1)),
-                ],
-              ),
-              SizedBox(height: 20),
-
-              // ✅ **Social Media Login**
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.g_mobiledata_rounded,
-                        size: 40, color: Colors.black),
-                    onPressed: () {
-                      signInWithGoogle();
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.facebook, size: 40, color: Colors.black),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.apple, size: 40, color: Colors.black),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
               SizedBox(height: 20),
 
               // ✅ **Already have an account? Login**
@@ -149,22 +106,20 @@ class _Register_ScreenState extends State<Register_Screen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have an account?',
-                        style: TextStyle(color: Colors.black)),
+                    Text('Already have an account?'),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Login_Screen()),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Login_Screen()));
                       },
                       child: Text('Login now'),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 20), // ✅ ป้องกันปุ่มติดขอบล่างของหน้าจอ
+              SizedBox(height: 20),
             ],
           ),
         ),

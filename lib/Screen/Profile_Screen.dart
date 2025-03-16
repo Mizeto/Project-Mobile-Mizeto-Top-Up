@@ -94,7 +94,8 @@ class Profile_Screen extends StatelessWidget {
             CircleAvatar(
               radius: 50,
               backgroundImage: NetworkImage(
-                user?.photoURL ?? 'https://example.com/default_avatar.png',
+                user?.photoURL ??
+                    'https://cdn.pixabay.com/photo/2015/12/22/04/00/photo-1103597_640.png',
               ),
             ),
             SizedBox(height: 10),

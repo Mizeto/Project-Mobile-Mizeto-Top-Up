@@ -18,6 +18,16 @@ class _Login_ScreenState extends State<Login_Screen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  // 🔹 **ฟังก์ชันแสดงข้อความแจ้งเตือน**
+  void showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   Future<UserCredential> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth =
@@ -34,8 +44,8 @@ class _Login_ScreenState extends State<Login_Screen> {
   Future<void> signUserIn() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
       );
       Navigator.pushReplacement(
         context,
@@ -43,26 +53,47 @@ class _Login_ScreenState extends State<Login_Screen> {
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        showErrorMessage("ไม่มีบัญชีนี้อยู่ในระบบ");
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        showErrorMessage("รหัสผ่านไม่ถูกต้อง");
+      } else {
+        showErrorMessage("เกิดข้อผิดพลาด: ${e.message}");
       }
     }
+  }
+
+  Widget _buildNavButton(IconData icon, int index, Widget page, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: Icon(icon, color: Colors.white),
+          onPressed: () {
+            if (!context.mounted)
+              return; // ป้องกันการเรียก Navigator.push ถ้า context ไม่อยู่แล้ว
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => page));
+          },
+        ),
+        SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(color: Colors.white),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        // ✅ ป้องกัน Overflow
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                  height: MediaQuery.of(context).size.height *
-                      0.1), // ✅ ปรับให้เหมาะกับหน้าจอ
+              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               Text(
                 "Login to Your Account",
                 style: TextStyle(
@@ -121,7 +152,6 @@ class _Login_ScreenState extends State<Login_Screen> {
                 child: Text("Login"),
               ),
               SizedBox(height: 20),
-              // ✅ **Or continue with section**
               Row(
                 children: [
                   Expanded(child: Divider(color: Colors.black, thickness: 1)),
@@ -157,7 +187,6 @@ class _Login_ScreenState extends State<Login_Screen> {
                 ],
               ),
               SizedBox(height: 20),
-              // ✅ **Register Button**
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -177,7 +206,7 @@ class _Login_ScreenState extends State<Login_Screen> {
                   ],
                 ),
               ),
-              SizedBox(height: 20), // ✅ ป้องกันปุ่มชนขอบหน้าจอ
+              SizedBox(height: 20),
             ],
           ),
         ),

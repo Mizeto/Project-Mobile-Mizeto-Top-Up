@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Game Top-up App',
       home: MainScreen(), // หน้าตรวจสอบการล็อกอิน
     );
   }
